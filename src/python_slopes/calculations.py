@@ -494,26 +494,3 @@ class Slice:
     
 
 
-# Initialize calculator
-calculator = SlopeStabilityCalculator()
-calculator.add_soil_layer(unit_weight=125, cohesion=600, friction_angle=25,bottom_elevation= 20,top_elevation=60)
-calculator.add_soil_layer(unit_weight=110, cohesion=0, friction_angle=30,bottom_elevation= 0,top_elevation=20)
-x_piez = [0.0, 50.0, 90.0, 130.0, 180.0]
-y_piez = [40.0, 35.0, 30.0, 20.0, 20.0]
-calculator.add_piezeometric_line(x_piez, y_piez)
-slip_center = (100.0, 80.0)
-slip_radius = 78.0
-calculator.add_slip_circle(center=slip_center, radius=slip_radius)
-def ground_surface(x):
-    if x <= 50: return 60.0
-    elif x <= 130: return 60 - (40/80) * (x - 50)
-    else: return 20.0
-calculator.set_ground_surface(ground_surface)
-calculator.create_slices(num_slices=100)
-results = calculator.analyze(methods=['oms', 'bishop'], use_base_unit_weight=False)
-print("Factors of Safety:", results)
-for i, s in enumerate(calculator.slices[:3]):
-    print(f"Slice {i}: Weight={s.weight}, Pore Pressure={s.pore_pressure}, Alpha={s.alpha}")
-
-
-calculator.plot_analysis()
